@@ -3,6 +3,7 @@
 #include <node_version.h>
 
 #include "utils.hpp"
+#include "mapnik_layer.hpp"
 #include "mapnik_map.hpp"
 #include "mapnik_image.hpp"
 #include "mapnik_grid.hpp"
@@ -155,6 +156,7 @@ void VectorTile::Initialize(Handle<Object> target) {
     NODE_SET_PROTOTYPE_METHOD(constructor, "composite", composite);
     NODE_SET_PROTOTYPE_METHOD(constructor, "query", query);
     NODE_SET_PROTOTYPE_METHOD(constructor, "names", names);
+    NODE_SET_PROTOTYPE_METHOD(constructor, "layers", layers);
     NODE_SET_PROTOTYPE_METHOD(constructor, "toJSON", toJSON);
     NODE_SET_PROTOTYPE_METHOD(constructor, "toGeoJSON", toGeoJSON);
     NODE_SET_PROTOTYPE_METHOD(constructor, "fromGeoJSON", fromGeoJSON);
@@ -596,6 +598,31 @@ Handle<Value> VectorTile::names(const Arguments& args)
         return scope.Close(arr);
     }
     return scope.Close(Undefined());
+}
+
+Handle<Value> VectorTile::layers(const Arguments& args)
+{
+    HandleScope scope;
+    VectorTile* d = node::ObjectWrap::Unwrap<VectorTile>(args.This());
+    mapnik::vector::tile const& tiledata = d->get_tile();
+    Local<Array> arr = Array::New(tiledata.layers_size());
+    for (int i=0; i < tiledata.layers_size(); ++i)
+    {
+        mapnik::vector::tile_layer const& layer = tiledata.layers(i);
+        boost::shared_ptr<mapnik::vector::tile_datasource> ds = boost::make_shared<
+                                        mapnik::vector::tile_datasource>(
+                                            layer,
+                                            d->x_,
+                                            d->y_,
+                                            d->z_,
+                                            d->width()
+                                            );
+        mapnik::layer lyr = mapnik::layer(layer.name());
+        lyr.set_datasource(ds);
+
+        arr->Set(i, Layer::New(lyr));
+    }
+    return scope.Close(arr);
 }
 
 Handle<Value> VectorTile::width(const Arguments& args)

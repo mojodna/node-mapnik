@@ -28,6 +28,7 @@ public:
     static Handle<Value> toJSON(Arguments const& args);
     static Handle<Value> query(Arguments const& args);
     static Handle<Value> names(Arguments const& args);    
+    static Handle<Value> layers(Arguments const& args);
     static Handle<Value> toGeoJSON(Arguments const& args);
     static Handle<Value> fromGeoJSON(Arguments const& args);
 #ifdef PROTOBUF_FULL
