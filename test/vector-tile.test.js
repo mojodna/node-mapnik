@@ -591,6 +591,7 @@ describe('mapnik.VectorTile ', function() {
         })[0].features.length;
 
         map.add_layer(dt.layers()[0]);
+        map.srs = "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over";
         map.extent = mercator.bbox(x, y, z, false, '900913');
 
         map.render(new mapnik.VectorTile(z, x, y), function(err, tile) {

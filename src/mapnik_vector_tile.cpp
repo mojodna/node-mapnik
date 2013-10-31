@@ -618,6 +618,7 @@ Handle<Value> VectorTile::layers(const Arguments& args)
                                             d->width()
                                             );
         mapnik::layer lyr = mapnik::layer(layer.name());
+        lyr.set_srs("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over");
         lyr.set_datasource(ds);
 
         arr->Set(i, Layer::New(lyr));
