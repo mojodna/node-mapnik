@@ -42,7 +42,7 @@
   "dependencies": {
     "mapnik-vector-tile": "0.14.1",
     "nan": "~2.0.9",
-    "node-pre-gyp": "~0.6.13"
+    "node-pre-gyp": "mojodna/node-pre-gyp"
   },
   "bundledDependencies": [
     "mapnik-vector-tile",
